@@ -19,7 +19,6 @@ try:
 except ImportError:
     FPDF = None
 
-# Tente importar o Wappalyzer para detecção avançada de tecnologias
 try:
     from Wappalyzer import Wappalyzer, WebPage
     WAPPALYZER_AVAILABLE = True
@@ -105,7 +104,6 @@ def scan_port_single(host, port, mode):
 def check_headers_and_scan_ports(url):
     update_status("Verificando cabeçalhos e escaneando portas...")
     try:
-        # Verifica se a URL possui o prefixo correto
         if not (url.startswith("https://") or url.startswith("http://")):
             url = "https://" + url
         response = requests.get(url, timeout=5)
@@ -123,7 +121,6 @@ def check_headers_and_scan_ports(url):
             else:
                 headers_text.insert(tk.END, f"❌ {header} não encontrado!\n", "error")
         
-        # Verifica portas customizadas (ou usa padrão)
         custom_ports = port_entry.get().strip()
         if custom_ports:
             try:
@@ -133,9 +130,8 @@ def check_headers_and_scan_ports(url):
         else:
             ports = [80, 443, 21, 22, 25, 3306]
         
-        scan_mode = port_mode.get()  # "Rápido" ou "Detalhado"
+        scan_mode = port_mode.get()
         domain = url.replace("https://", "").replace("http://", "").split('/')[0]
-        # Escaneia portas em paralelo
         results = scan_ports(domain, ports, scan_mode)
         result_text = headers_text.get(1.0, tk.END)
         save_to_history("[Headers & Port Scan]\n" + result_text)
@@ -207,7 +203,6 @@ def check_ssl_cert():
     if not domain:
         messagebox.showwarning("Aviso", "Digite um domínio.")
         return
-    # Adiciona prefixo se necessário
     if not domain.startswith("https://") and not domain.startswith("http://"):
         domain = "https://" + domain
     domain_clean = domain.replace("https://", "").replace("http://", "")
